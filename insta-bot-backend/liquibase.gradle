@@ -1,0 +1,43 @@
+import org.yaml.snakeyaml.Yaml
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.yaml:snakeyaml:1.17")
+    }
+}
+
+static def getTimestamp() {
+    def date = new Date();
+    return (int) (date.toInstant().toEpochMilli() / 1000)
+}
+
+static def timeStampedPath() {
+    return 'src/main/resources/db/changelogs/changelog-' + getTimestamp() + ".xml"
+}
+
+def file = new File("$projectDir/src/main/resources/application.yml");
+if (file.exists()) {
+    InputStream input = new FileInputStream(file);
+    def props = new Yaml().load(input)
+    def implicitNamingStrategy = 'org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl';
+    def physicalNamingStrategy = 'org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl'
+//def physicalNamingStrategy = 'io.micronaut.data.hibernate.naming.DefaultPhysicalNamingStrategy'
+    liquibase {
+        activities {
+            main {
+                changeLogFile timeStampedPath()
+                url props.datasources.default.url
+                username props.datasources.default.username
+                password props.datasources.default.password
+
+                referenceUrl 'hibernate:spring:nl.blackstardlb.insta.bot.data.entities' +
+                        '?dialect=org.hibernate.dialect.MySQL5Dialect' +
+                        '&hibernate.physical_naming_strategy=' + physicalNamingStrategy +
+                        '&hibernate.implicit_naming_strategy=' + implicitNamingStrategy
+            }
+        }
+    }
+}

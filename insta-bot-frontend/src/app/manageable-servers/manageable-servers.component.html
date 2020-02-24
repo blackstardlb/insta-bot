@@ -1,0 +1,13 @@
+<mat-nav-list>
+    <mat-list-item *ngFor="let server of servers | async" [routerLink]="'server/' + server.id"
+                   disableRipple routerLinkActive='is-active' (click)="closeDrawer()">
+        <img [src]="server.iconURL" matListIcon>
+        <h3 matLine>{{server.name}}</h3>
+        <p matLine>
+            <mat-icon *ngIf="server.botInServer" inline="true" matTooltip="Bot is in this server">check_circle</mat-icon>
+            <mat-icon *ngIf="server.botInServer && !server.canTalk" inline="true"
+                      matTooltip="Bot can't talk in the selected channel" class="warning">error
+            </mat-icon>
+        </p>
+    </mat-list-item>
+</mat-nav-list>

@@ -1,0 +1,44 @@
+import org.apache.tools.ant.filters.ReplaceTokens
+
+def requiredProperties = ["discordApiToken", "discordApiClientId", "discordApiClientSecret", "mysqlUsername", "mysqlPassword"]
+
+requiredProperties.each { key ->
+    if (!project.hasProperty(key)) {
+        throw new Exception("Set property $key in the gradle.properties file")
+    }
+}
+
+task fillApplicationProperties(type: Copy) {
+    from 'src/main/resources/base/'
+    into 'src/main/resources/'
+    Hashtable<String, String> props = new Hashtable<>();
+    project.properties.keySet().each {
+        propKey ->
+            if (propKey != null && project.properties.get(propKey) != null) {
+                props.put(propKey, project.properties.get(propKey).toString())
+            }
+    }
+    filter(ReplaceTokens, tokens: props)
+}
+
+task fillTestApplicationProperties(type: Copy) {
+    from 'src/test/resources/base/'
+    into 'src/test/resources/'
+    Hashtable<String, String> props = new Hashtable<>();
+    project.properties.keySet().each {
+        propKey ->
+            if (propKey != null && project.properties.get(propKey) != null) {
+                props.put(propKey, project.properties.get(propKey).toString())
+            }
+    }
+    filter(ReplaceTokens, tokens: props)
+}
+
+
+task taskCleanGeneratedProperties(type: Delete) {
+    delete 'src/test/resources/application.yml', 'src/main/resources/application.yml'
+}
+
+clean.finalizedBy taskCleanGeneratedProperties
+compileJava.dependsOn fillApplicationProperties
+compileJava.dependsOn fillTestApplicationProperties

@@ -1,0 +1,8 @@
+<mat-card class="main-content-card">
+    <mat-card-title>
+        Welcome
+    </mat-card-title>
+    <mat-card-content *ngIf="me | async as user">
+        Welcome to Instabot {{ user.name }}. Click one of the servers in the sidebar to get started.
+    </mat-card-content>
+</mat-card>

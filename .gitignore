@@ -1,0 +1,14 @@
+# Project exclude paths
+/.gradle/
+/build/
+/insta-bot-backend/.gradle/
+/insta-bot-backend/build/
+/module-test/build/
+/insta-bot-backend/build/classes/java/main/
+/insta-bot-frontend/.gradle/
+/insta-bot-frontend/dist/
+/insta-bot-frontend/node_modules/
+/integration-tests/build
+/insta-bot-backend/gradle.properties
+/insta-bot-backend/src/main/resources/application.yml
+/insta-bot-backend/src/test/resources/application-test.yml

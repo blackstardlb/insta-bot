@@ -1,0 +1,15 @@
+<mat-card *ngIf="user | async as aUser">
+    <div fxLayout="row">
+        <ngx-avatar [src]="aUser.avatarURL" round="true" size="100"></ngx-avatar>
+    </div>
+    <div [matMenuTriggerFor]="logoutMenu" class="name-div" fxLayout="row">
+        <button class="no-v-padding" disableRipple mat-flat-button>
+            <span>{{aUser.name}}</span>
+            <mat-icon>expand_more</mat-icon>
+        </button>
+    </div>
+</mat-card>
+
+<mat-menu #logoutMenu="matMenu" class="no-h-padding">
+    <button (click)="logout()" mat-menu-item>Logout</button>
+</mat-menu>

@@ -1,0 +1,25 @@
+<configuration>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <withJansi>true</withJansi>
+        <!-- encoders are assigned the type
+             ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
+        <encoder>
+            <pattern>%cyan(%d{HH:mm:ss.SSS}) %gray([%thread]) %highlight(%-5level) %magenta(%logger{120}) - %msg%n
+            </pattern>
+        </encoder>
+    </appender>
+
+    <root level="info">
+        <appender-ref ref="STDOUT"/>
+    </root>
+
+    <logger name="io.micronaut.http.client" level="ALL"/>
+    <logger name="io.micronaut.context.condition" level="ERROR"/>
+    <logger name="io.micronaut.data.query" level="ALL"/>
+    <logger name="org.hibernate.SQL" level="DEBUG"/>
+    <logger name="org.hibernate.type" level="INFO"/>
+    <logger name="org.javacord" level="ERROR"/>
+    <logger name="org.javacord.core.util.rest.RestRequest" level="DEBUG"/>
+    <logger name="io.micronaut.security.filters" level="DEBUG"/>
+</configuration>

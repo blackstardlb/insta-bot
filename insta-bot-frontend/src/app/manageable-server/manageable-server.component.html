@@ -1,0 +1,61 @@
+<div *ngIf="isLoading | async as aServer; else templateRef">
+    <form [formGroup]="form">
+        <mat-card class="main-content-card">
+            <mat-card-title>{{aServer.name}}</mat-card-title>
+            <ng-container *ngIf="!(aServer.botInServer)">
+                <mat-card-content>
+                    <p>Instabot is not in this server.
+                        Click <a [href]="addBotURL(aServer)" target="_blank">here</a> or the button below to add it.<br>
+                        Click refresh after you've added the bot.
+                    </p>
+                </mat-card-content>
+                <mat-card-actions>
+                    <a [href]="addBotURL(aServer)" target="_blank">
+                        <button class="action" color="primary" mat-flat-button type="button">ADD BOT</button>
+                    </a>
+                    <button (click)="reset()" class="action" color="warn" mat-flat-button type="button">REFRESH</button>
+                </mat-card-actions>
+            </ng-container>
+            <ng-container *ngIf="aServer.botInServer">
+                <mat-card-content>
+                    <mat-form-field floatLabel="always" fxLayout="row">
+                        <mat-label>Enabled</mat-label>
+                        <mat-slide-toggle formControlName="isBotEnabled" name="isBotEnabled">
+                        </mat-slide-toggle>
+                        <textarea hidden matInput></textarea>
+                    </mat-form-field>
+                    <mat-form-field floatLabel="always" fxLayout="row">
+                        <mat-label>Bot Channel</mat-label>
+                        <mat-select formControlName="selectedChannelId" [(value)]="aServer.selectedChannelId">
+                            <mat-option *ngFor="let channel of aServer.channels" [value]="channel.id.toString()">
+                                {{channel.name}}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="!aServer.canTalk">The bot doesn't have permission to talk in this server
+                        </mat-error>
+                    </mat-form-field>
+                    <mat-form-field floatLabel="always" fxLayout="row">
+                        <mat-label>Instagram</mat-label>
+                        <input formControlName="instagramName" matInput name="instagramName" required type="text"/>
+                    </mat-form-field>
+                </mat-card-content>
+                <mat-card-actions>
+                    <button (click)="save(aServer)" class="action" color="primary" mat-flat-button type="button">SAVE
+                    </button>
+                    <button (click)="reset()" class="action" color="warn" mat-flat-button type="button">RESET</button>
+                </mat-card-actions>
+            </ng-container>
+        </mat-card>
+    </form>
+</div>
+
+<ng-template #templateRef>
+    <div *ngIf="error | async as aError">
+        <div *ngIf="aError === 'none'" class="spinner-div">
+            <mat-progress-spinner class="spinner" mode="indeterminate"></mat-progress-spinner>
+        </div>
+        <div *ngIf="aError !== 'none'">
+            Something went wrong while loading
+        </div>
+    </div>
+</ng-template>

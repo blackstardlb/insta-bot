@@ -1,0 +1,45 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <changeSet author="dbrison (generated)" id="1573061539875-1">
+        <createTable tableName="InstagramInformation">
+            <column name="instagramName" type="VARCHAR(255)">
+                <constraints primaryKey="true" primaryKeyName="InstagramInformationPK"/>
+            </column>
+            <column name="instagramId" type="BIGINT"/>
+            <column name="queryHash" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="dbrison (generated)" id="1573061539875-2">
+        <createTable tableName="LastInstagramPost">
+            <column name="id" type="VARCHAR(255)">
+                <constraints primaryKey="true" primaryKeyName="LastInstagramPostPK"/>
+            </column>
+            <column name="createdAt" type="datetime"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="dbrison (generated)" id="1573061539875-3">
+        <createTable tableName="NotificationRequest">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="NotificationRequestPK"/>
+            </column>
+            <column name="discordChanelId" type="VARCHAR(255)"/>
+            <column name="isEnabled" type="BIT"/>
+            <column name="instagramInformation_instagramName" type="VARCHAR(255)"/>
+            <column name="lastInstagramPost_id" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="dbrison (generated)" id="1573061539875-4">
+        <addForeignKeyConstraint baseColumnNames="instagramInformation_instagramName"
+                                 baseTableName="NotificationRequest" constraintName="FK2tdrv8u3b9ywyq4dyymcu6kqe"
+                                 deferrable="false" initiallyDeferred="false" referencedColumnNames="instagramName"
+                                 referencedTableName="InstagramInformation" validate="true"/>
+    </changeSet>
+    <changeSet author="dbrison (generated)" id="1573061539875-5">
+        <addForeignKeyConstraint baseColumnNames="lastInstagramPost_id" baseTableName="NotificationRequest"
+                                 constraintName="FK6lu813xs3ikdmfl12x1t540ad" deferrable="false"
+                                 initiallyDeferred="false" referencedColumnNames="id"
+                                 referencedTableName="LastInstagramPost" validate="true"/>
+    </changeSet>
+</databaseChangeLog>

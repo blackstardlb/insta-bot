@@ -1,0 +1,3 @@
+test:
+  discord:
+    access_token: @testDiscordAccessToken@

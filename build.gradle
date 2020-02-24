@@ -1,0 +1,59 @@
+group 'nl.blackstardlb'
+version '1.0'
+
+task copyDist(type: Copy) {
+    group = 'deploy'
+    from('insta-bot-frontend/dist/')
+    into('insta-bot-backend/src/main/resources')
+    doLast {
+        file("insta-bot-backend/src/main/resources/insta-bot-frontend").renameTo(file("insta-bot-backend/src/main/resources/client"))
+    }
+}
+
+task deleteDist(type: Delete) {
+    group = 'deploy'
+    delete 'insta-bot-backend/src/main/resources/client'
+}
+
+task deploy {
+    group = 'deploy'
+}
+
+task cleanAll {
+    group = 'build'
+    dependsOn getTaskFromSubProject("insta-bot-frontend", "clean"), getTaskFromSubProject("insta-bot-backend", "clean")
+}
+
+task copyJar(type: Copy) {
+    group = 'deploy'
+    from('insta-bot-backend/build/libs') {
+        include("insta-bot-backend-*-all.jar")
+    }
+    into("build")
+    rename { String fileName ->
+        fileName.replace("-backend-$project.version-all", "")
+    }
+}
+
+copyDist.dependsOn getTaskFromSubProject("insta-bot-frontend", "buildProdNgApp")
+getTaskFromSubProject("insta-bot-backend", "processResources").finalizedBy deleteDist
+
+deploy.dependsOn cleanAll
+deploy.dependsOn copyDist
+deploy.dependsOn getTaskFromSubProject("insta-bot-backend", "shadowJar")
+deploy.finalizedBy copyJar
+
+
+def jib = getTaskFromSubProject('insta-bot-backend', 'jib')
+jib.dependsOn cleanAll
+jib.dependsOn copyDist
+jib.finalizedBy deleteDist
+
+def jibDockerBuild = getTaskFromSubProject('insta-bot-backend', 'jibDockerBuild')
+jibDockerBuild.dependsOn cleanAll
+jibDockerBuild.dependsOn copyDist
+jibDockerBuild.finalizedBy deleteDist
+
+def getTaskFromSubProject(String subproject, String taskName) {
+    return project(subproject).getTasksByName(taskName, false)[0]
+}

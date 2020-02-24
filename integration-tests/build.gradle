@@ -1,0 +1,47 @@
+plugins {
+    id 'java'
+    id "com.wiredforcode.spawn" version "0.8.2"
+}
+
+group 'nl.blackstardlb'
+version parent.version
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    cucumberVersion = "5.0.0-RC2"
+    junitVersion = "5.3.1"
+}
+
+dependencies {
+    testImplementation "org.assertj:assertj-core:3.11.1"
+    testImplementation 'org.mockito:mockito-core:3.1.0'
+
+    testImplementation "io.cucumber:cucumber-java:${cucumberVersion}"
+    testImplementation "io.cucumber:cucumber-junit:${cucumberVersion}"
+
+    testImplementation 'io.rest-assured:rest-assured:4.1.2'
+
+    testImplementation "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
+    testRuntimeOnly "org.junit.vintage:junit-vintage-engine:${junitVersion}"
+}
+
+test {
+    useJUnitPlatform()
+}
+
+task startServer(type: SpawnProcessTask) {
+    command "java -jar ${parent.project("insta-bot-backend").buildDir}/libs/insta-bot-backend-${project.version}-all.jar"
+    ready 'Server Running:'
+}
+
+task stopServer(type: KillProcessTask)
+
+startServer.dependsOn parent.getTasksByName("shadowJar", true)[0]
+test.dependsOn startServer
+test.finalizedBy stopServer

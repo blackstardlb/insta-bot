@@ -1,0 +1,77 @@
+micronaut:
+  security:
+    enabled: true
+    intercept-url-map:
+      - pattern: /**
+        http-method: GET
+        access:
+          - isAnonymous()
+      - pattern: /images/*
+        http-method: GET
+        access:
+          - isAnonymous()
+      - pattern: /swagger/*
+        http-method: GET
+        access:
+          - isAnonymous()
+  application:
+    name: insta-bot
+  http:
+    services:
+      instagram:
+        urls:
+          - https://www.instagram.com/
+      discord:
+        urls:
+          - https://discordapp.com/api/v6/
+  server:
+    cors:
+      enabled: true
+  router:
+    static-resources:
+      client:
+        enabled: true
+        mapping: /**
+        paths: classpath:client
+      swagger:
+        enabled: true
+        paths:
+          - classpath:META-INF/swagger
+          - classpath:swagger
+        mapping: /swagger/**
+      images:
+        enabled: true
+        paths: classpath:images
+        mapping: /images/**
+datasources:
+  default:
+    url: jdbc:mysql://localhost:3306/instabot
+    driverClassName: com.mysql.cj.jdbc.Driver
+    username: @mysqlUsername@
+    password: @mysqlPassword@
+    dialect: MYSQL
+jpa:
+  default:
+    properties:
+      hibernate:
+        bytecode:
+          provider: none
+        hbm2ddl:
+          auto: validate
+instagram:
+  graphql: graphql/query/
+  queryRate: 2m
+  postBaseURL: https://www.instagram.com/p/
+liquibase:
+  datasources:
+    default:
+      change-log: 'classpath:db/liquibase-changelog.xml'
+discord:
+  cdn: https://cdn.discordapp.com/
+  api:
+    token: @discordApiToken@
+    client-id: @discordApiClientId@
+    client-secret: @discordApiClientSecret@
+    scopes:
+      - identity
+      - guild

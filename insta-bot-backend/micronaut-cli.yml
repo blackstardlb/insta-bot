@@ -1,0 +1,5 @@
+profile: service
+defaultPackage: nl.blackstardlb
+---
+testFramework: junit
+sourceLanguage: java
