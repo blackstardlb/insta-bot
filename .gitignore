@@ -12,3 +12,4 @@
 /insta-bot-backend/gradle.properties
 /insta-bot-backend/src/main/resources/application.yml
 /insta-bot-backend/src/test/resources/application-test.yml
+.idea
