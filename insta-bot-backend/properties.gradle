@@ -1,6 +1,6 @@
 import org.apache.tools.ant.filters.ReplaceTokens
 
-def requiredProperties = ["discordApiToken", "discordApiClientId", "discordApiClientSecret", "mysqlUsername", "mysqlPassword"]
+def requiredProperties = ["discordApiToken", "discordApiClientId", "discordApiClientSecret", "mysqlUsername", "mysqlPassword", "testDiscordAccessToken"]
 
 requiredProperties.each { key ->
     if (!project.hasProperty(key)) {

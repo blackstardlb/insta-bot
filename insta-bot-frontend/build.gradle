@@ -15,7 +15,14 @@ task clean(type: Delete) {
     delete 'dist'
 }
 
-task buildProdNgApp(type: NpmTask) {
+task link(type: NpmTask) {
+    group = 'build'
+    args = ['link', "@angular/cli@8.3.25"]
+}
+
+tasks.find {it.name == "npmInstall"} finalizedBy link
+
+task buildProdNgApp(type: NpmTask, dependsOn: "npmInstall") {
     group = 'build'
     args = ['run', 'prod-build']
 }

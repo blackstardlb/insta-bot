@@ -84,7 +84,7 @@ dependencies {
     implementation 'org.apache.commons:commons-io:1.3.2'
 
     // Javacord
-    implementation 'org.javacord:javacord:3.0.4'
+    implementation 'org.javacord:javacord:3.0.6'
 
     testAnnotationProcessor platform("io.micronaut:micronaut-bom:$micronautVersion")
     testAnnotationProcessor "io.micronaut:micronaut-inject-java"
@@ -120,4 +120,12 @@ tasks.withType(JavaCompile) {
 apply from: 'liquibase.gradle'
 apply from: 'properties.gradle'
 
-jib.to.image = 'docker.pkg.github.com/blackstardlb/insta-bot/insta-bot:' + project.version
+jib {
+    to {
+        image = 'docker.pkg.github.com/blackstardlb/insta-bot/insta-bot:' + project.version
+        auth {
+            username = GITHUB_USERNAME
+            password = GITHUB_ACCESS_TOKEN
+        }
+    }
+}

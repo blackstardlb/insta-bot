@@ -4,6 +4,7 @@ import io.micronaut.test.annotation.MicronautTest;
 import nl.blackstardlb.insta.bot.data.instagram.models.request.QueryParams;
 import nl.blackstardlb.insta.bot.data.instagram.models.request.QueryVariables;
 import nl.blackstardlb.insta.bot.data.instagram.models.response.graphql.InstagramQueryResponse;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import javax.inject.Inject;
@@ -27,6 +28,7 @@ class InstagramClientTest {
     }
 
     @Test
+    @Disabled
     void getQueryParams() {
         QueryParams queryParams = instagramClient.getQueryParams("asmrglow");
         assertThat(queryParams.getId()).isEqualTo(21494279);
